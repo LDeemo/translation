@@ -11,7 +11,6 @@ import (
 
 var appInfo entry.AppConfig
 var transParams entry.TranslationParams
-var res entry.Result
 
 func init() {
 	appInfo.AppKey = "27b2f18edab025ae"
@@ -23,8 +22,22 @@ func main() {
 	r.Use(Cors())
 	r.POST("/query", query)
 	r.GET("/index", func(c *gin.Context) {
-		c.JSON(http.StatusOK,gin.H{
-			"message":"可以了",
+		c.JSON(http.StatusOK, gin.H{
+			"message": "可以了",
+		})
+	})
+	r.POST("/testquery", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"errorCode":   "0",
+			"query":       "good",
+			"translation": []string{"好", "优秀"},
+			"web": []entry.DictWeb{
+				{"good", []string{"良好", "善", "美好"}},
+				{"good boy", []string{"好孩子", "好人", "阴阳人"}},
+			},
+			"l":         "EN2zh-CHS",
+			"tSpeakUrl": "http://openapi.youdao.com/ttsapi?q=%E5%BC%95%E6%93%8E&langType=zh-CHS&sign=C3CE3701D1A5853CCD29EE1D3235998D&salt=1593010752158&voice=4&format=mp3&appKey=27b2f18edab025ae",
+			"speakUrl":  "http://openapi.youdao.com/ttsapi?q=engine&langType=en&sign=EBC6DB7C135D120D1EA5E12CFCE81768&salt=1593010752158&voice=4&format=mp3&appKey=27b2f18edab025ae",
 		})
 	})
 	r.Run(":9090")
@@ -41,6 +54,7 @@ func query(c *gin.Context) {
 	//发请求访问
 	jsonByte := util.DoPost(transParams)
 	//绑定返回的json
+	var res entry.Result
 	err = json.Unmarshal(jsonByte, &res)
 	if err != nil {
 		log.Fatalf("json parse failed,err: %v\n", err)
