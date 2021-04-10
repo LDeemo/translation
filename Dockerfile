@@ -1,9 +1,9 @@
 FROM debian:stretch as runner
-ARG WORKDIR
+#ARG WORKDIR
 ARG BIN
-ENV ep=$WORKDIR/bin/$BIN
+#ENV ep=$WORKDIR/bin/$BIN
 
-WORKDIR $WORKDIR
+#WORKDIR $WORKDIR
 
 RUN echo "" > /etc/apt/sources.list \
  && echo "deb http://mirrors.cloud.tencent.com/debian/ stretch main non-free contrib" >> /etc/apt/sources.list \
@@ -24,9 +24,9 @@ RUN echo "" > /etc/apt/sources.list \
  && apt-get clean
 
 COPY --from=fullstorydev/grpcurl:v1.3.1 /bin/grpcurl /usr/bin
-RUN echo "#!/bin/bash \n $ep \$@" > ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+#RUN echo "#!/bin/bash \n $ep \$@" > ./entrypoint.sh
+#RUN chmod +x ./entrypoint.sh
 
 COPY build/build_service/ /usr/local/services
 
-ENTRYPOINT ["./entrypoint.sh"]
+#ENTRYPOINT ["./entrypoint.sh"]
