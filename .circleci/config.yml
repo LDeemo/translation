@@ -2,7 +2,7 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/repo/translation_web/tools
+    working_directory: ~/translation_web
     docker:
       - image: circleci/golang:1.14.4
     steps:
