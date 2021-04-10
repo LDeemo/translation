@@ -2,7 +2,7 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/repo
+    working_directory: ~/repo/translation_web/tools
     docker:
       - image: circleci/golang:1.14.4
     steps:
@@ -27,7 +27,7 @@ jobs:
 
       # 打包镜像 推到远程仓库
       - run: |
-           docker info
-           docker build -t translation -f Dockerfile .
-           docker tag translation imdeemo/translation-${CIRCLE_BUILD_NUM}-CI
-           docker push imdeemo/translation-${CIRCLE_BUILD_NUM}-CI
+           # docker info
+           - docker build -t translation -f Dockerfile .
+           - docker tag translation imdeemo/translation-${CIRCLE_BUILD_NUM}-CI
+           - docker push imdeemo/translation-${CIRCLE_BUILD_NUM}-CI
