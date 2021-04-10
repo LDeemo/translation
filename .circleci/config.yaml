@@ -1,0 +1,33 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/golang:1.14.4
+    steps:
+      - checkout
+
+      #连接远程仓库
+      - setup_remote_docker
+      - run:
+          name: Login to Dockerhub
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Install Dependencies
+          command: go mod download
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+
+      # 打包镜像 推到远程仓库
+      - run: |
+           docker info
+           docker build -t translation -f Dockerfile .
+           docker tag translation imdeemo/translation-${CIRCLE_BUILD_NUM}-CI
+           docker push imdeemo/translation-${CIRCLE_BUILD_NUM}-CI
