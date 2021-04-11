@@ -10,9 +10,8 @@ spec:
       app: translation
   template:
     metadata:
-      name:
-        labels:
-          app: translation
+      labels:
+        app: translation
     spec:
       containers:
         - name: translation-service
