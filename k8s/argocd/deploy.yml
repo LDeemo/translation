@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: translation
+  namespace: translation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: translation
+  template:
+    metadata:
+      name:
+        labels:
+          app: translation
+    spec:
+      containers:
+        - name: translation-service
+          image: imdeemo/translation-ci:11
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: translation
+spec:
+  selector:
+    app: translation
+  ports:
+    - name: http
+      port: 9090
+      targetPort: 9090
+  type: LoadBalancer
